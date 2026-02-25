@@ -4,4 +4,5 @@ keyboard
 PyQt5
 Pillow
 pytesseract
+opencv-python
 groq
