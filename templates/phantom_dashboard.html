@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Phantom_X Threat Intelligence</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* BASE */
+body {
+margin: 0;
+font-family: Inter, Segoe UI, sans-serif;
+background:
+linear-gradient(180deg,#020508,#050b12,#020508);
+color: white;
+}
+
+/* CONTAINER */
+.container {
+width: 95%;
+margin: auto;
+padding: 20px;
+}
+
+/* HEADER */
+.header {
+display: flex;
+justify-content: space-between;
+margin-bottom: 20px;
+}
+
+.logo {
+font-size: 26px;
+font-weight: 600;
+color: #00d4ff;
+}
+
+.system-status {
+color: #8b949e;
+font-size: 16px;
+}
+
+.dot {
+height: 10px;
+width: 10px;
+background: #00d4ff;
+border-radius: 50%;
+display: inline-block;
+margin-right: 8px;
+box-shadow: 0 0 12px #00d4ff;
+}
+
+/* GRAPH GRID */
+.graph-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 25px;
+}
+
+/* PANEL */
+.panel {
+background: rgba(255,255,255,0.03);
+padding: 20px;
+border-radius: 12px;
+border: 1px solid rgba(0,212,255,0.2);
+box-shadow: 0 0 25px rgba(0,212,255,0.08);
+height: 350px;
+}
+
+.panel-title {
+font-size: 18px;
+margin-bottom: 10px;
+color: #00d4ff;
+}
+
+/* MASTER PANEL */
+.master-panel {
+grid-column: span 2;
+height: 420px;
+border: 1px solid rgba(255,0,60,0.4);
+box-shadow: 0 0 40px rgba(255,0,60,0.3);
+}
+
+/* CANVAS FULL SIZE */
+canvas {
+width: 100% !important;
+height: 85% !important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+
+<div class="logo">
+Phantom_X Threat Intelligence
+</div>
+
+<div class="system-status">
+<span class="dot"></span>
+Engine Active
+</div>
+
+</div>
+
+<!-- FULL GRAPH GRID -->
+<div class="graph-grid">
+
+<div class="panel">
+<div class="panel-title">Timeline Risk</div>
+<canvas id="timelineChart"></canvas>
+</div>
+
+<div class="panel">
+<div class="panel-title">Risk Factors</div>
+<canvas id="riskFactorChart"></canvas>
+</div>
+
+<div class="panel">
+<div class="panel-title">Threat Probability</div>
+<canvas id="threatChart"></canvas>
+</div>
+
+<div class="panel">
+<div class="panel-title">Behavioral Risk</div>
+<canvas id="behaviorChart"></canvas>
+</div>
+
+<div class="panel">
+<div class="panel-title">System Vulnerability</div>
+<canvas id="systemChart"></canvas>
+</div>
+
+<div class="panel master-panel">
+<div class="panel-title">Overall Risk Index</div>
+<canvas id="overallChart"></canvas>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let charts = {}
+
+async function loadPhantomData() {
+
+    const response = await fetch("/api/phantom_risk", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            message: "phantom_x_scan"
+        })
+
+    });
+
+    const result = await response.json();
+
+    const datasets = result.datasets;
+
+    if (!datasets || datasets.length !== 6) {
+
+        console.error("Invalid Phantom_X dataset");
+
+        return;
+
+    }
+
+    const [
+        timeline_risk_scores,
+        risk_factor_scores,
+        threat_probability_scores,
+        behavioral_risk_scores,
+        system_vulnerability_scores,
+        overall_risk_index
+    ] = datasets;
+
+
+    createChart(
+        "timelineChart",
+        "Timeline Risk",
+        timeline_risk_scores,
+        "line",
+        "#00d4ff"
+    );
+
+
+    createChart(
+        "riskFactorChart",
+        "Risk Factors",
+        risk_factor_scores,
+        "bar",
+        "#7a5cff"
+    );
+
+
+    createChart(
+        "threatChart",
+        "Threat Probability",
+        threat_probability_scores,
+        "bar",
+        "#ff4d4d"
+    );
+
+
+    createChart(
+        "behaviorChart",
+        "Behavioral Risk",
+        behavioral_risk_scores,
+        "bar",
+        "#ffaa00"
+    );
+
+
+    createChart(
+        "systemChart",
+        "System Vulnerability",
+        system_vulnerability_scores,
+        "bar",
+        "#00ff9c"
+    );
+
+
+    createChart(
+        "overallChart",
+        "Overall Risk Index",
+        overall_risk_index,
+        "line",
+        "#ff0033"
+    );
+
+}
+
+
+function createChart(canvasId, label, data, type, color) {
+
+    if (charts[canvasId]) {
+
+        charts[canvasId].destroy();
+
+    }
+
+    charts[canvasId] = new Chart(
+
+        document.getElementById(canvasId),
+
+        {
+
+            type: type,
+
+            data: {
+
+                labels: data.map((_, i) => `T${i+1}`),
+
+                datasets: [
+
+                    {
+                        label: label,
+                        data: data,
+                        borderColor: color,
+                        backgroundColor: color,
+                        fill: false,
+                        tension: 0.4
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        labels: {
+                            color: "#00d4ff"
+                        }
+                    }
+
+                },
+
+                scales: {
+
+                    x: {
+
+                        ticks: {
+                            color: "#8b949e"
+                        },
+
+                        grid: {
+                            color: "rgba(0,212,255,0.08)"
+                        }
+
+                    },
+
+                    y: {
+
+                        ticks: {
+                            color: "#8b949e"
+                        },
+
+                        grid: {
+                            color: "rgba(0,212,255,0.08)"
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    );
+
+}
+
+
+// Load Phantom_X datasets automatically
+loadPhantomData();
+
+</script>
+</body>
+</html>

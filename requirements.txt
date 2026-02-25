@@ -1,0 +1,7 @@
+Flask
+mss
+keyboard
+PyQt5
+Pillow
+pytesseract
+groq

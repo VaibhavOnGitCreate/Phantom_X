@@ -1,0 +1,278 @@
+=====================================================
+PHANTOM_X — GHOST PROTOCOL
+Cybersecurity Risk Analysis and AI Assistant System
+=====================================================
+
+
+OVERVIEW
+-----------------------------------------------------
+Phantom_X is a cybersecurity risk analysis and AI assistant system with:
+
+• Screen capture using PyQt5
+• Hotkey listener (Ctrl + Shift + X)
+• OCR text extraction
+• AI-powered risk analysis
+• Insight generation
+• Graph visualization
+• Context-aware AI Assistant
+• Flask-based web interface (Ghost Protocol)
+
+
+=====================================================
+SYSTEM REQUIREMENTS
+=====================================================
+
+Python Version:
+----------------
+Python 3.10 or newer recommended
+
+
+Operating System:
+------------------
+Windows (recommended)
+Linux (supported)
+Mac (supported with permissions)
+
+
+Required Software:
+------------------
+• Python
+• Tesseract OCR
+• PyQt5
+
+
+=====================================================
+INSTALLATION STEPS
+=====================================================
+
+STEP 1 — Clone or download project
+-----------------------------------
+
+Example location:
+
+C:\Phantom_X
+
+
+STEP 2 — Create virtual environment (recommended)
+--------------------------------------------------
+
+Open terminal inside project folder:
+
+Windows:
+--------
+python -m venv venv
+
+Activate:
+--------
+venv\Scripts\activate
+
+
+Linux / Mac:
+------------
+python3 -m venv venv
+source venv/bin/activate
+
+
+STEP 3 — Install dependencies
+-----------------------------
+
+Run:
+
+pip install -r requirements.txt
+
+
+This installs:
+
+• Flask
+• PyQt5
+• pytesseract
+• Pillow
+• keyboard
+• requests
+• openai
+• numpy
+• and other required modules
+
+
+=====================================================
+OCR SETUP (Tesseract Required)
+=====================================================
+
+STEP 4 — Install Tesseract OCR
+------------------------------
+
+Download from:
+
+https://github.com/UB-Mannheim/tesseract/wiki
+
+
+Install to:
+
+C:\Program Files\Tesseract-OCR
+
+
+If needed, configure path in Python:
+
+Example:
+
+pytesseract.pytesseract.tesseract_cmd =
+"C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+
+
+=====================================================
+PROJECT STRUCTURE
+=====================================================
+
+Project/
+│
+├── app.py
+├── requirements.txt
+├── INSTRUCTIONS.txt
+│
+├── templates/
+│   ├── dashboard.html
+│   ├── phantom_dashboard.html
+│   ├── insights.html
+│   └── assistant.html
+│
+├── static/
+│   ├── style.css
+│   └── capture.png
+│
+└── Phantom_X/
+    │
+    ├── ai_model/
+    ├── prompts/
+    ├── listener.py      ← PyQt5 hotkey + screen capture
+    └── capture.py
+
+
+=====================================================
+RUNNING THE APPLICATION
+=====================================================
+
+STEP 5 — Start Phantom_X server
+-------------------------------
+
+Run:
+
+python app.py
+
+
+Output:
+
+Phantom_X Server Starting...
+Dashboard: http://127.0.0.1:5000
+
+
+Open browser:
+
+http://127.0.0.1:5000
+
+
+=====================================================
+SCREEN CAPTURE USAGE
+=====================================================
+
+Press:
+
+Ctrl + Shift + X
+
+
+This triggers:
+
+• PyQt5 screen capture
+• Saves capture.png
+• OCR extracts text
+• Phantom_X analyzes risk
+• Insights update automatically
+
+
+=====================================================
+DASHBOARD BUTTON FUNCTIONS
+=====================================================
+
+View Graphs
+-----------
+Displays cybersecurity risk graphs.
+
+
+Detailed Insights
+-----------------
+Displays AI-generated cybersecurity explanations.
+
+
+AI Assistant
+------------
+Allows asking Phantom_X questions based on captured content.
+
+
+=====================================================
+BACKGROUND THREADS
+=====================================================
+
+Phantom_X runs these workers:
+
+1. OCR Auto Extract Worker
+   monitors capture.png
+
+2. PyQt5 Hotkey Listener Worker
+   listens for Ctrl + Shift + X
+
+
+=====================================================
+TROUBLESHOOTING
+=====================================================
+
+Problem: Ctrl + Shift + X not working
+-------------------------------------
+
+Fix:
+
+Run terminal as Administrator (Windows)
+
+
+Problem: PyQt5 not installed
+----------------------------
+
+Run:
+
+pip install PyQt5
+
+
+Problem: OCR not working
+------------------------
+
+Install Tesseract properly.
+
+
+Problem: Threads running twice
+------------------------------
+
+Use:
+
+if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+    start_background_workers()
+
+
+=====================================================
+PRODUCTION RECOMMENDATION
+=====================================================
+
+Run Flask without debug:
+
+app.run(debug=False)
+
+
+=====================================================
+SECURITY NOTICE
+=====================================================
+
+Phantom_X is a cybersecurity research and analysis tool.
+
+Do not expose publicly without authentication.
+
+
+=====================================================
+END OF INSTRUCTIONS
+=====================================================

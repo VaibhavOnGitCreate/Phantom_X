@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<title>Ghost Protocol</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+
+<!-- HEADER -->
+<div class="header">
+
+<div class="logo">
+GHOST PROTOCOL
+</div>
+
+<div class="system-status">
+
+<span class="dot"></span>
+AI System Active
+
+</div>
+
+</div>
+
+
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+
+<!-- LEFT PANEL -->
+<div class="panel scan">
+
+<div class="panel-title">
+Scan Zone
+</div>
+
+
+<p class="capture-instruction">
+Press CTRL + SHIFT + X to start screen capture
+</p>
+
+
+<textarea
+id="detected-text"
+class="scan-input"
+placeholder="Detected text will appear here..."
+readonly
+></textarea>
+
+
+<img
+src="/capture"
+class="capture-image"
+id="capture-image"
+>
+
+</div>
+
+
+
+<!-- RIGHT PANEL -->
+<div class="panel analysis">
+
+<div class="panel-title">
+Active Engines
+</div>
+
+
+<div class="engine">
+<span>OCR Engine</span>
+<strong class="active">Active</strong>
+</div>
+
+<div class="engine">
+<span>Phishing Detection Model</span>
+<strong class="active">Active</strong>
+</div>
+
+<div class="engine">
+<span>Risk Analysis Engine</span>
+<strong class="active">Active</strong>
+</div>
+
+<div class="engine">
+<span>Screen Capture Listener</span>
+<strong class="active">Active</strong>
+</div>
+
+<div class="engine">
+<span>Flask Backend Server</span>
+<strong class="active">Active</strong>
+</div>
+
+<div class="engine">
+<span>AI Transformer Model</span>
+<strong class="active">Active</strong>
+</div>
+
+<div class="engine">
+<span>Threat Intelligence Module</span>
+<strong class="active">Active</strong>
+</div>
+
+
+
+<!-- ACTION BUTTONS -->
+<div class="action-buttons">
+
+<button class="action-btn" onclick="openGraphs()">
+View Graphs
+</button>
+
+<button class="action-btn"
+onclick="window.location.href='/insights'">
+Detailed Insights
+</button>
+
+<button class="action-btn" onclick="openAssistant()">
+<onclick="window.location.href='/assistant'">
+AI Assistant
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<!-- FOOTER -->
+<div class="footer">
+
+<div class="node">
+<span class="dot"></span>
+Flask Backend Running
+</div>
+
+<div class="node">
+<span class="dot"></span>
+OCR Ready
+</div>
+
+<div class="node">
+<span class="dot"></span>
+AI Model Loaded
+</div>
+
+</div>
+
+
+</div>
+
+<script>
+
+/* AUTO REFRESH IMAGE */
+
+setInterval(()=>{
+
+document.getElementById("capture-image").src =
+"/capture?" + new Date().getTime()
+
+},2000)
+
+
+
+/* DIRECTLY CALL extract_text() */
+
+async function updateDetectedText(){
+
+    try{
+
+        const res = await fetch("/extract_text")
+
+        const data = await res.json()
+
+        document.getElementById("detected-text").value =
+            data.text || ""
+
+    }
+
+    catch(err){
+
+        console.error(err)
+
+    }
+
+}
+
+/* Update every 1 second */
+setInterval(updateDetectedText, 1000)
+
+/* Run immediately */
+updateDetectedText()
+
+
+
+function openGraphs(){
+
+window.location.href="/graphs"
+
+}
+
+function openInsights(){
+
+window.location.href="/insights"
+
+}
+
+function openAssistant(){
+
+window.location.href="/assistant"
+
+}
+
+</script>
+
+
+</body>
+</html>
